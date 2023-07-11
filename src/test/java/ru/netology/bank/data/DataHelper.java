@@ -32,7 +32,7 @@ public class DataHelper {
         return new AuthInfo("", "qwerty123");
     }
 
-    public static AuthInfo getFakePasswordInfo() {
+    public static AuthInfo getFakeInfo() {
         return new AuthInfo("vasya", faker.internet().password());
     }
     public static AuthInfo getFakePasswordInfoNoLogin() {

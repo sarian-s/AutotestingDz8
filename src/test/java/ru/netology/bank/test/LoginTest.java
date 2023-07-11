@@ -17,19 +17,23 @@ import static ru.netology.bank.data.SQLHelper.fillDatabase;
 
 public class LoginTest {
     LoginPage loginPage;
+
     @BeforeEach
     void setup() {
         loginPage = open("http://localhost:9999/", LoginPage.class);
     }
-//    @AfterAll
-//    static void tear(){
-//        cleanDatabase();
-//    }
-//    @BeforeAll
-//    static void tearup() {
-//        cleanDatabase();
-//        fillDatabase();
-//    }
+
+    @AfterAll
+    static void tear() {
+        cleanDatabase();
+    }
+
+    @BeforeAll
+    static void tearup() {
+        cleanDatabase();
+        fillDatabase();
+    }
+
     @Test
     public void successLogin() throws SQLException {
         var authInfo = getAuthInfo();
@@ -38,44 +42,41 @@ public class LoginTest {
         VerificationCode verificationCode = SQLHelper.getVerificationCode();
         authorizationCodePage.validVerify(verificationCode);
     }
+
     @Test
 
     public void wrongCredentials() {
-            var authInfo = getFakeAuthInfo();
-            loginPage.login(authInfo);
-            loginPage.verifyErrorNotificationVisibility();
-        }
+        var authInfo = getFakeAuthInfo();
+        loginPage.login(authInfo);
+        loginPage.verifyErrorNotificationVisibility();
+    }
 
     @Test
     public void wrongCode() {
-            var authInfo = getAuthInfo();
-            var authorizationCodePage = loginPage.validLogin(authInfo);
-            authorizationCodePage.verifyPageVisible();
-            VerificationCode verificationCode = getFakeVerificationCode();
-            authorizationCodePage.verify(verificationCode);
-            authorizationCodePage.verifyErrorNotificationVisibility();
-        }
+        var authInfo = getAuthInfo();
+        var authorizationCodePage = loginPage.validLogin(authInfo);
+        authorizationCodePage.verifyPageVisible();
+        VerificationCode verificationCode = getFakeVerificationCode();
+        authorizationCodePage.verify(verificationCode);
+        authorizationCodePage.verifyErrorNotificationVisibility();
+    }
 
     @Test
-    public void wrongCredentials3Times() throws SQLException {
+    public void wrongCredentials3Times() {
         var authInfo = getAuthInfoPasswordNoLogin();
-        var authInfoF = getFakePasswordInfo();
-        var authInfoPassword = getFakePasswordInfoNoLogin();
-        loginPage.login(authInfoF);
+        var authInfoFake = getFakeInfo();
+        var authInfoFakePassword = getFakePasswordInfoNoLogin();
+        loginPage.login(authInfoFake);
         loginPage.verifyErrorNotificationVisibility();
         loginPage.clearFormPassword();
-        loginPage.login(authInfoPassword);
+        loginPage.login(authInfoFakePassword);
         loginPage.verifyErrorNotificationVisibility();
         loginPage.clearFormPassword();
-        loginPage.login(authInfoPassword);
+        loginPage.login(authInfoFakePassword);
         loginPage.verifyErrorNotificationVisibility();
         loginPage.clearFormPassword();
+
         loginPage.login(authInfo);
-//        var authorizationCodePage = loginPage.validLogin(authInfo);
         loginPage.verifyErrorNotificationVisibility();
-//        authorizationCodePage.verifyPageVisible();
-//        VerificationCode verificationCode = SQLHelper.getVerificationCode();
-//        authorizationCodePage.validVerify(verificationCode);
-//        authorizationCodePage.verifyErrorNotificationVisibility();
     }
 }

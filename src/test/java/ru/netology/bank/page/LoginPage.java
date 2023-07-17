@@ -48,8 +48,9 @@ public class LoginPage {
     }
     public void clearFormPassword() {
         passwordField.click();
-        while(!Objects.equals(passwordField.getValue(), "")){
-            passwordField.sendKeys(Keys.BACK_SPACE);
-        }
+        passwordField.sendKeys(Keys.SHIFT, Keys.HOME, Keys.BACK_SPACE);// можно удалить данные из поля таким способом
+//        while(!Objects.equals(passwordField.getValue(), "")){  // или таким, с помощью цикла while
+//            passwordField.sendKeys(Keys.BACK_SPACE);
+//        }
     }
 }
